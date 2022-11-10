@@ -1,13 +1,10 @@
 package ProjectEuler;
 
-import java.io.*;
-import java.lang.reflect.Array;
-import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.Scanner;
 
+
 public class LargeSum2 {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		// Large sum
 		Scanner scanner = new Scanner(System.in);
 		int n = scanner.nextInt();
@@ -16,10 +13,10 @@ public class LargeSum2 {
 		// Creation of string array to store every input 50 digit number as String
 		String[] stringArray = new String[n];
 
-		// Creation of char[55] to convert strings to char[] and sum on char level
-		// Creation of char[] 5 indices larger to store 50 th and more chars come from
+		// Creation of char[58] to convert strings to char[] and sum on char level
+		// Creation of char[] 8 indices larger to store 50 th and more chars come from
 		// summation input upto 10^3 50 digits #
-		int spareChars = 5;
+		int spareChars = 8;
 		char[] character = new char[50 + spareChars];
 		// initialization of initially empty char[] as (' '-32) which has integer value
 		// of 0
@@ -37,7 +34,7 @@ public class LargeSum2 {
 			// looping for String[]
 			for (int i = 0; i < stringArray.length; i++) {
 				// updating char at j by summing integer values of char
-				character[j] += (char) stringArray[i].charAt(j - 5);
+				character[j] += (char) stringArray[i].charAt(j - spareChars);
 			}
 		}
 		// integer casting of char[]
@@ -46,7 +43,7 @@ public class LargeSum2 {
 			char2int[i] = (int) character[i];
 		}
 		// converting reminders to digits and updating trailing chars in the char array
-		for (int i = char2int.length - 1; i >= spareChars; i--) {
+		for (int i = char2int.length - 1; i >= spareChars/2; i--) {
 			int x = char2int[i] - 48 * n;
 			if (x<=0) {
 				x = 0;
@@ -63,6 +60,21 @@ public class LargeSum2 {
 				char2int[i - 1] = char2int[i - 1] + (x - (x / 1000) * 1000 - (((x % 1000)/100)*100))/10;
 			}
 			char2int[i] = (x % 10);
+		}
+		// to convert reminders to digits and updating trailing chars in the char[0-spareChar] array
+		for (int i = spareChars; i > spareChars/2; i--) {
+			int z = char2int[i];
+			if (z<100&&z > 9) {
+				char2int[i-1]+= z/10; 
+			}else if (z < 1000) {
+				char2int[i - 2] = char2int[i - 2] + (z) / 100;
+				char2int[i - 1] = char2int[i - 1] + (z - (z / 100) * 100) / 10;
+			} else if (z < 10000) {
+				char2int[i - 3] = char2int[i - 3] + (z) / 1000;
+				char2int[i - 2] = char2int[i - 2] + (z - (z / 1000) * 1000) / 100;
+				char2int[i - 1] = char2int[i - 1] + (z - (z / 1000) * 1000 - (((z % 1000)/100)*100))/10;
+			}
+			char2int[i] = z%10;
 		}
 		// string manipulation to write first 10 digits
 		String str = "";
