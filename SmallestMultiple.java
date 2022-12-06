@@ -16,7 +16,7 @@ public class SmallestMultiple {
 			System.out.println(LCM(numbers, 0));
 		}
 	}
-
+	// recursive gcd to call in lcm calculation -> lcm(a,b) = a*b/gcd(a,b)
 	public static long gcd(long a, long b) {
 		return b == 0L ? a : gcd(b, a % b);
 
@@ -26,9 +26,10 @@ public class SmallestMultiple {
 		long lcml = a * b / gcd(a, b);
 		return lcml;
 	}
-
+	//LCM for arrays
 	private static long LCM(long[] numbers, int i) {
-		try {
+		try { 	// Exception handling for possible test case(0) {1,1}
+			// to manage IndexOutOfBoundsException
 			if (i + 2 == numbers.length) {
 				return lcm(numbers[i], numbers[i + 1]);
 			} else {
